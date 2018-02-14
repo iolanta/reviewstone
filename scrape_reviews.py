@@ -27,7 +27,6 @@ def ParseReviews(url):
 				XPATH_REVIEW_TEXT = './/span[@data-hook="review-body"]//text()'
 				raw_review_text = review.xpath(XPATH_REVIEW_TEXT)
 
-				#cleaning data
 				review_text = ' '.join(' '.join(raw_review_text).split())
 
 				reviews_list.append(review_text)
@@ -56,16 +55,20 @@ def ReadAsin():
 	'B008LR8YMA']
 	pos_list = []
 	neg_list = []
+
 	for asin in AsinList:
 		url_five_star = 'http://www.amazon.com/product-reviews/'+asin+'/ref=cm_cr_arp_d_viewopt_sr?ie=UTF8&reviewerType=all_reviews&filterByStar=five_star&pageNumber=1'
 		url_four_star = 'http://www.amazon.com/product-reviews/'+asin+'/ref=cm_cr_arp_d_viewopt_sr?ie=UTF8&reviewerType=all_reviews&filterByStar=four_star&pageNumber=1'
 		url_one_star = 'http://www.amazon.com/product-reviews/'+asin+'/ref=cm_cr_arp_d_viewopt_sr?ie=UTF8&reviewerType=all_reviews&filterByStar=one_star&pageNumber=1'
 		url_two_star = 'http://www.amazon.com/product-reviews/'+asin+'/ref=cm_cr_arp_d_viewopt_sr?ie=UTF8&reviewerType=all_reviews&filterByStar=two_star&pageNumber=1'
-		sys.stdout.write("Downloading and processing asin: " + asin +"\r")
+
+		sys.stdout.write("Downloading and processing asin: " + asin + "\r")
 		sys.stdout.flush()
+
 		pos_list += ParseReviews(url_five_star) + ParseReviews(url_four_star)
 		neg_list += ParseReviews(url_one_star) + ParseReviews(url_two_star)
 		sleep(5)
+
 	with open('pos_reviews.txt', 'w') as f1, open('neg_reviews.txt', 'w') as f2:
 		for elem in pos_list: f1.write(ChangeReview(elem) + '\n')
 		for elem in neg_list: f2.write(ChangeReview(elem) + '\n')
